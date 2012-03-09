@@ -29,8 +29,8 @@ class Server(tornado.web.RequestHandler):
         self.recz = recz
 
     def get(self):
-        k = int(self.get_argument('k', 5))
         item_id = self.get_argument('itemId')
+        k = int(self.get_argument('k', 5))
         self.write(str(self.recz.recommend(item_id, k)))
 
 if __name__ == "__main__":
