@@ -8,6 +8,7 @@ class Recz:
         self.items = {}
 
     def add_example(self, item_id, session_id):
+        """Adds an example to the training data."""
         self.sessions.setdefault(item_id, set()).add(session_id)
         self.items.setdefault(session_id, set()).add(item_id)
 
