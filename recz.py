@@ -20,11 +20,10 @@ class Recz:
 
     def recommend(self, item_id, k=5):
         """Build a list of k recommended items, based on the given item_id."""
-        sessions = dict(self.sessions)
-        sessionset = sessions.pop(item_id, set())
+        sessionset = self.sessions.get(item_id, set())
         itemcounts = defaultdict(int)
 
-        # Count the occurrences of other items viewed by the same sessions
+        # Count the occurrences of other items viewed by the same sessions.
         for session_id in sessionset:
             itemset = self.items.get(session_id, set())
             itemset.discard(item_id)
