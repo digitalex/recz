@@ -4,17 +4,15 @@ Recz is a lightweight, fast recommendation system for item-to-item recommendatio
 
 Setup
 -----
-Recz takes as input a file with pairs of itemId, sessionId, e.g.:
+Recz expects a sqlite database named 'recz.sqlite' with a table named 'example'. In the sqlite3 console, create it like this:
 
-    NO0000000982506379 01d3fc5d9f23e8838ad21334aeac4cd1
-    NO0000000982506379 01d3fc5d9f23e8838ad21334aeac4cd1
-    NO0000000952507729 23d9c7fe7fc6ec66ae9183504cdbc2f1
-    NO0000000990891370 d7174e5c77eca009d8782cd6a6b76c47
-    NO0000000990891370 3aa320519fe006c7b38a3edf705e7f7a
+    CREATE TABLE examples (item_id TEXT, session_id TEXT);
+    CREATE INDEX main.itemidx ON examples(item_id);
+    CREATE INDEX main.sessionidx ON examples(session_id);
 
-Start the server simply like this:
+Import some data however you'd like (I use grep, sed and awk to create a sql script). Then start the server simply like this:
 
-    ./server.py < input.txt
+    ./server.py
 
 Test it:
 

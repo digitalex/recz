@@ -1,32 +1,24 @@
 from collections import defaultdict
+from db import Db
 
 class Recz:
     """Lightweight, fast recommendation system for item-to-item recommendations."""
 
     def __init__(self):
-        self.sessions = {}
-        self.items = {}
+        self.db = Db()
 
     def add_example(self, item_id, session_id):
         """Adds an example to the training data."""
-        self.sessions.setdefault(item_id, set()).add(session_id)
-        self.items.setdefault(session_id, set()).add(item_id)
-
-    def compact(self):
-        """Removes data that cannot help recommendations."""
-        for key in filter(lambda k: len(self.sessions[k])<2, self.sessions.iterkeys()):
-          del self.sessions[key]
-        for key in filter(lambda k: len(self.items[k])<2, self.items.iterkeys()):
-          del self.items[key]
+        self.db.add_example(item_id, session_id)
 
     def recommend(self, item_id, k=5):
         """Build a list of k recommended items, based on the given item_id."""
-        sessionset = self.sessions.get(item_id, set())
+        sessionset = self.db.get_sessionset(item_id)
         itemcounts = defaultdict(int)
 
         # Count the occurrences of other items viewed by the same sessions.
         for session_id in sessionset:
-            itemset = self.items.get(session_id, set())
+            itemset = self.db.get_itemset(session_id)
             itemset.discard(item_id)
             for other_item_id in itemset:
                 itemcounts[other_item_id] += 1

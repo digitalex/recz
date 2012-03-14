@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import sys
 import fileinput
 import tornado.web
 import tornado.ioloop
@@ -21,18 +22,7 @@ class Server(tornado.web.RequestHandler):
 
     @staticmethod
     def main():
-        n = 0
         recz = Recz()
-        start_read = clock()
-        for line in fileinput.input():
-          vals = line.split()
-          if len(vals) == 2:
-            item_id, session_id = vals
-            recz.add_example(item_id, session_id)
-            n += 1
-        recz.compact()
-
-        print "Processed %d examples in %f seconds." % (n, clock() - start_read)
         app = tornado.web.Application([(r'/recommend', Server, dict(recz=recz)),])
         app.listen(PORT)
 
