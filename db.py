@@ -6,17 +6,25 @@ class Db:
     def __init__(self, db_name='recz.sqlite'):
         self.db_name = db_name
 
+    def add_example(self, item_id, session_id):
+        itemset = self.get_itemset(session_id)
+        sessionset = self.get_sessionset(item_id)
+        itemset.add(item_id)
+        sessionset.add(session_id)
+        conn = lite.connect(self.db_name)
+        with conn:
+            conn.execute("UPDATE items SET sessions=? WHERE item_id=?", [','.join(sessionset), item_id])
+            conn.execute("UPDATE sessions SET items=? WHERE session_id=?", [','.join(itemset), session_id])
+
     def get_itemset(self, session_id):
         conn = lite.connect(self.db_name)
-        curs = conn.execute("select item_id from examples where session_id=?",[session_id])
-        rows = curs.fetchall()
-        conn.close()
-        return set(map(lambda r: r[0], rows))
+        with conn:
+            curs = conn.execute("SELECT items FROM sessions WHERE session_id=?",[session_id])
+            return set(curs.fetchone()[0].split(','))
 
     def get_sessionset(self, item_id):
         conn = lite.connect(self.db_name)
-        curs = conn.execute("select session_id from examples where item_id=?",[item_id])
-        rows = curs.fetchall()
-        conn.close()
-        return set(map(lambda r: r[0], rows))
+        with conn:
+            curs = conn.execute("SELECT sessions FROM items WHERE item_id=?",[item_id])
+            return set(curs.fetchone()[0].split(','))
 
