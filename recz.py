@@ -17,10 +17,8 @@ class Recz:
         itemcounts = defaultdict(int)
 
         # Count the occurrences of other items viewed by the same sessions.
-        for session_id in sessionset:
-            itemset = self.db.get_itemset(session_id)
-            itemset.discard(item_id)
-            for other_item_id in itemset:
+        for other_item_id in self.db.get_itemset(sessionset):
+            if other_item_id != item_id:
                 itemcounts[other_item_id] += 1
 
         # Sort by count, descending, then take the k first items.
