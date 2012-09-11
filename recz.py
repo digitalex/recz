@@ -37,3 +37,6 @@ class Recz:
                 key=lambda k: itemcounts[k],
                 reverse=True)[:k]
 
+    def dump(self):
+        for item_id in self.sessions.iterkeys():
+            print '%s\t%s' % (item_id, self.recommend(item_id))
