@@ -1,0 +1,11 @@
+
+print "Available commands:"
+print ""
+print "  /recommend"
+print "    Recommends items similar to the given itemId."
+print "    Parameters:"
+print "      itemId (required): The ID of the item to find recommendations for."
+print "      k (optional): The number of recommendations to return (default: 5)."
+print ""
+print "    Example:"
+print "      curl \"http://localhost:8888/recommend?itemId=NO0000000995516055&k=3\""
